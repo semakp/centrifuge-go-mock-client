@@ -1,0 +1,8 @@
+# Имя лог-файла
+log-filename: 'log_file.log'
+
+# Адрес (порт) сервиса http
+http-addr: ':7600'
+
+# Адрес центрифуги по умолчанию (можно также указать в запросе)
+centrifugo-url: 'http://localhost/Centrifugo'
