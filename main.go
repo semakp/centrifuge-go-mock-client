@@ -1,4 +1,3 @@
-// Private channel subscription example.
 package main
 
 import (
@@ -244,7 +243,7 @@ func newClient(userid string, centrifugoUrl string, stop chan int, cookies []*ht
 	for {
 		select {
 			case <- stop:
-				fmt.Println("user exit ", userid)
+				log.Println("user exit ", userid)
 				return
 		}
 	}
@@ -272,7 +271,7 @@ func ApiServer(w http.ResponseWriter, r *http.Request) {
 	case "connection.add":
 		if r.Method != "POST" {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprint(w, "Only POST is allowed")
+			_, _ = fmt.Fprint(w, "Only POST is allowed\n")
 			return
 		}
 
@@ -280,14 +279,14 @@ func ApiServer(w http.ResponseWriter, r *http.Request) {
 		body, err := ioutil.ReadAll(reader)
 		if err != nil {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprintf(w, "Can't read the body: %v", err)
+			_, _ = fmt.Fprintf(w, "Can't read the body: %v\n", err)
 			return
 		}
 
 		var requestAdd RequestAdd
 		if err := json.Unmarshal(body, &requestAdd); err != nil {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprintf(w, "Json body parse error: %v", err)
+			_, _ = fmt.Fprintf(w, "Json body parse error: %v\n", err)
 			return
 		}
 
@@ -295,7 +294,7 @@ func ApiServer(w http.ResponseWriter, r *http.Request) {
 
 		if requestAdd.Id == "" && requestAdd.Many == 0 {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprintf(w, "User ID is not specified")
+			_, _ = fmt.Fprintf(w, "User ID is not specified\n")
 			return
 		}
 		var rawCentrifugoUrl = settings.CentrifugoUrl
@@ -305,14 +304,14 @@ func ApiServer(w http.ResponseWriter, r *http.Request) {
 
 		if rawCentrifugoUrl == "" {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprintf(w, "Centrifugo Url is not specified")
+			_, _ = fmt.Fprintf(w, "Centrifugo Url is not specified\n")
 			return
 		}
 
 		centrifugoUrl, err := url.Parse(rawCentrifugoUrl)
 		if err != nil {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprintf(w, "Can't parse centrifugoUrl %s", centrifugoUrl)
+			_, _ = fmt.Fprintf(w, "Can't parse centrifugoUrl %s\n", centrifugoUrl)
 			return
 		}
 
@@ -335,7 +334,7 @@ func ApiServer(w http.ResponseWriter, r *http.Request) {
 
 		if len(cookies) == 0 {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprintf(w, "Cookies not found")
+			_, _ = fmt.Fprintf(w, "Cookies not found\n")
 			return
 		}
 
@@ -368,7 +367,7 @@ func ApiServer(w http.ResponseWriter, r *http.Request) {
 	case "connection.remove":
 		if r.Method != "POST" {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprint(w, "Only POST is allowed")
+			_, _ = fmt.Fprint(w, "Only POST is allowed\n")
 			return
 		}
 
@@ -376,20 +375,20 @@ func ApiServer(w http.ResponseWriter, r *http.Request) {
 		body, err := ioutil.ReadAll(reader)
 		if err != nil {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprintf(w, "Can't read the body: %v", err)
+			_, _ = fmt.Fprintf(w, "Can't read the body: %v\n", err)
 			return
 		}
 
 		var requestRemove RequestRemove
 		if err := json.Unmarshal(body, &requestRemove); err != nil {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprintf(w, "Json body parse error: %v", err)
+			_, _ = fmt.Fprintf(w, "Json body parse error: %v\n", err)
 			return
 		}
 
 		if requestRemove.Id == "" {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprintf(w, "User ID is not specified")
+			_, _ = fmt.Fprintf(w, "User ID is not specified\n")
 			return
 		}
 
@@ -413,19 +412,19 @@ func ApiServer(w http.ResponseWriter, r *http.Request) {
 		jr, err := json.Marshal(resp)
 		if err != nil {
 			w.WriteHeader(500)
-			_, _ = fmt.Fprintf(w, "Make json error: %v", err)
+			_, _ = fmt.Fprintf(w, "Make json error: %v\n", err)
 			return
 		}
 		_, _ = w.Write(jr)
 
 	default:
 		w.WriteHeader(404)
-		_, _ = fmt.Fprint(w, "Not found")
+		_, _ = fmt.Fprint(w, "Not found\n")
 	}
 }
 
 func serveHttp(addr string) {
-	fmt.Println("Listening at ", addr)
+	log.Println("Listening at ", addr)
 	http.HandleFunc("/", ApiServer)
 	err := http.ListenAndServe(addr, nil)
 	if err != nil {
@@ -457,11 +456,9 @@ func startLoggingToFile(logFileName string) {
 		}()
 		log.SetOutput(f)
 
-		fmt.Println("Start logging to file", logFileName)
-		log.Println("=====Start logging=====")
-	} else {
-		fmt.Println("Start logging to console")
+		fmt.Println("Logging to file", logFileName)
 	}
+	log.Println("=====Start logging=====")
 }
 
 func main() {
