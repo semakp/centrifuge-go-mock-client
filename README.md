@@ -47,9 +47,11 @@ Subscribed - количество клиентов, которые подпис�
 
 # Запуск через docker
 - Запуск центрифуги:
-docker run --ulimit nofile=65536:65536 -v ~/centrifugo -p 8000:8000 centrifugo/centrifugo centrifugo -c config.json
+docker run --ulimit nofile=65536:65536 -v ~/centrifugo:/centrifugo -p 8000:8000 centrifugo/centrifugo centrifugo -c centrifugo_config.yaml, где ~/centrifugo - это папка с конфигом центрифуги
+
 - Сборка образа:
 docker build . -t centrifuge-go-mock-client
+
 - Запуск образа:
 docker run --rm --network="host" centrifuge-go-mock-client
 
