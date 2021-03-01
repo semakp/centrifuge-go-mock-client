@@ -49,11 +49,8 @@ Subscribed - количество клиентов, которые подпис�
 - Запуск центрифуги:
 docker run --ulimit nofile=65536:65536 -v ~/centrifugo:/centrifugo -p 8000:8000 centrifugo/centrifugo centrifugo -c centrifugo_config.yaml, где ~/centrifugo - это папка с конфигом центрифуги
 
-- Сборка образа:
-docker build . -t centrifuge-go-mock-client
-
-- Запуск образа:
-docker run --rm --network="host" centrifuge-go-mock-client
+- Запуск образа (в docker hub):
+docker run --rm --network="host" semakp/centrifuge-go-mock-client
 
 # Запросы curl
 - Узнать количество подключённых:
